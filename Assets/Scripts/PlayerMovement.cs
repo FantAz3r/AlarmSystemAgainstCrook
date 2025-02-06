@@ -2,14 +2,19 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float mouseSensitivity = 2f; 
-    [SerializeField] private Camera _playerCamera;
-    [SerializeField] private float maxLookUpAngel = 45f;
-    [SerializeField] private float minLookDownAngel = -45f;
+    private const string KeyboardHorizontalAxis = "Horizontal";
+    private const string KeyboardVerticalAxis = "Vertical";
+    private const string MouseHorizontalAxis = "Mouse X";
+    private const string MouseVerticalAxis = "Mouse Y";
 
-    private float rotationY; 
-    private float rotationX;
+    [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] private float _mouseSensitivity = 2f; 
+    [SerializeField] private Camera _playerCamera;
+    [SerializeField] private float _maxLookUpAngel = 45f;
+    [SerializeField] private float _minLookDownAngel = -45f;
+
+    private float _rotationY; 
+    private float _rotationX;
 
     private void Start()
     {
@@ -17,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
         Cursor.visible = false;
     }
 
-    void Update()
+    private void Update()
     {
         Move();
         Rotate();
@@ -25,22 +30,22 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
+        float moveHorizontal = Input.GetAxis(KeyboardHorizontalAxis);
+        float moveVertical = Input.GetAxis(KeyboardVerticalAxis);
         Vector3 move = transform.right * moveHorizontal + transform.forward * moveVertical;
-        transform.position += move * moveSpeed * Time.deltaTime;
+        transform.position += move * _moveSpeed * Time.deltaTime;
     }
 
     private void Rotate()
     {
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
+        float mouseX = Input.GetAxis(MouseHorizontalAxis);
+        float mouseY = Input.GetAxis(MouseVerticalAxis);
 
-        rotationY += mouseX * mouseSensitivity;
-        rotationX -= mouseY * mouseSensitivity;
-        rotationX = Mathf.Clamp(rotationX, minLookDownAngel, maxLookUpAngel);
+        _rotationY += mouseX * _mouseSensitivity;
+        _rotationX -= mouseY * _mouseSensitivity;
+        _rotationX = Mathf.Clamp(_rotationX, _minLookDownAngel, _maxLookUpAngel);
 
-        _playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-        transform.rotation = Quaternion.Euler(0, rotationY, 0);
+        _playerCamera.transform.localRotation = Quaternion.Euler(_rotationX, 0, 0);
+        transform.rotation = Quaternion.Euler(0, _rotationY, 0);
     }
 }

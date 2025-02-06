@@ -9,7 +9,7 @@ public class House : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player")) 
+        if (other.TryGetComponent(out PlayerMovement playerMovement)) 
         {
             SomeoneCame?.Invoke(); 
         }
@@ -17,7 +17,7 @@ public class House : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player")) 
+        if (other.TryGetComponent(out PlayerMovement playerMovement) 
         {
             BecameEmpty?.Invoke();
         }

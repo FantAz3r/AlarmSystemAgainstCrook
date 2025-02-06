@@ -6,7 +6,7 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private KeyCode _interactionKey = KeyCode.E;
     [SerializeField] private LayerMask _ignoreLayer;
 
-    void Update()
+    private void Update()
     {
         Interaction();
     }

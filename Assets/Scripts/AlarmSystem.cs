@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class AlarmSystem : MonoBehaviour
 {
     [SerializeField] private AudioClip _alarmSystem;
@@ -18,7 +19,7 @@ public class AlarmSystem : MonoBehaviour
 
     private void Awake()
     {
-        _audioSource = gameObject.AddComponent<AudioSource>();
+        _audioSource = GetComponent<AudioSource>();
         _audioSource.clip = _alarmSystem;
         _audioSource.loop = true; 
     }
