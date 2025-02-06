@@ -1,0 +1,26 @@
+using System;
+using UnityEngine;
+
+[RequireComponent(typeof(Collider))]
+public class House : MonoBehaviour
+{
+    public event Action SomeoneCame;
+    public event Action BecameEmpty;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player")) 
+        {
+            SomeoneCame?.Invoke(); 
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player")) 
+        {
+            BecameEmpty?.Invoke();
+        }
+    }
+}
+
