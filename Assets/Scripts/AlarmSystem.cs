@@ -8,8 +8,8 @@ public class AlarmSystem : MonoBehaviour
     [SerializeField] private ThiefDetector _thiefDetector;
 
     private AudioSource _audioSource;
-    private float _targetVolume = 0f;
     private float _volumeChangeSpeed = 1f;
+    private Coroutine _volumeCoroutine; 
 
     private void Awake()
     {
@@ -17,39 +17,39 @@ public class AlarmSystem : MonoBehaviour
         _audioSource.clip = _alarmSystem;
         _audioSource.loop = true;
     }
-   
+
     public void PlayAlarm()
     {
-        StartCoroutine(IncreaceVolume());
+        if (_volumeCoroutine == null)
+        {
+            int targetVolume = 1;
+            _audioSource.Play();
+            _volumeCoroutine = StartCoroutine(ChangeVolume(targetVolume));
+        }
     }
 
     public void StopAlarm()
     {
-        StartCoroutine(DecreaceVolume());
-    }
+        int targetVolume = 0;
 
-    private IEnumerator IncreaceVolume()
-    {
-        _targetVolume = 1f;
-        _audioSource.Play();
-
-        while (_audioSource.volume != _targetVolume)
+        if (_volumeCoroutine != null) 
         {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _targetVolume, _volumeChangeSpeed * Time.deltaTime);
-            yield return null;
-        }
-    }
-
-    private IEnumerator DecreaceVolume()
-    {
-        _targetVolume = 0f;
-
-        while (_audioSource.volume != _targetVolume)
-        {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _targetVolume, _volumeChangeSpeed * Time.deltaTime);
-            yield return null;
+            StopCoroutine(_volumeCoroutine);
+            _volumeCoroutine = null; 
         }
 
+        _volumeCoroutine = StartCoroutine(ChangeVolume(targetVolume));
         _audioSource.Stop();
+    }
+
+    private IEnumerator ChangeVolume(int targetVolume)
+    {
+        while (_audioSource.volume != targetVolume)
+        {
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, targetVolume, _volumeChangeSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        _volumeCoroutine = null; 
     }
 }
